@@ -2,7 +2,7 @@
 
 ## Description & folder structure
 
-cellshope e-commerce platforme powered by microservices.
+cellshope e-commerce platforme for selling mobile phones powered by microservices.
 
 ```bash
 root
