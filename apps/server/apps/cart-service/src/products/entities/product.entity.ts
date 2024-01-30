@@ -12,6 +12,11 @@ export class Product {
 
   @Prop()
   quantity: number;
+ 
+  @Prop()
+  image: string;
+
+
 }
 
 export type ProductDocument = Product & Document;

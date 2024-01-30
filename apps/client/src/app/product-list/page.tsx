@@ -16,16 +16,21 @@ const ProductList = () => {
     };
 
     fetchProducts();
-  }, []); // Add an empty dependency array to make it a "Client Component"
+  }, []);
 
   return (
     <div>
       <h1>Product List</h1>
-      <ul>
+      <div>
         {products.map((product) => (
-          <li key={product._id}>{product.name} - ${product.price}</li>
+          <div>
+            <h2>{product.name}</h2>
+            <p>Price: ${product.price}</p>
+            <p>Quantity: {product.quantity}</p>
+            <img src={product.image} alt="Product Image" />
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

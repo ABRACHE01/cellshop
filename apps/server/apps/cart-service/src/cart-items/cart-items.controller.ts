@@ -29,6 +29,15 @@ export class CartItemsController {
     return { message: 'The product has been successfully deleted from the shopping cart' };
   }
 
+  // @Delete(':cartId/products/:productId')
+  // async deleteProductFromCart(
+  //   @Param('cartId') cartId: string,
+  //   @Param('productId') productId: string,
+  // ) {
+  //   const cart = await this.cartItemsService.deleteProductFromCart(cartId, productId);
+  //   return { message: 'Product deleted from cart successfully', cart };
+  // }
+
   @Get()
   findAll() {
     return this.cartItemsService.findAll();

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsUrl, MaxLength } from 'class-validator';
 
 export class CreateProductDto {
   @IsNotEmpty({ message: 'name is required' })
@@ -10,4 +10,7 @@ export class CreateProductDto {
 
   @IsNumber()
   quantity: number;
+
+  @IsUrl({}, { message: 'image must be a valid URL' })
+  image: string;
 }
