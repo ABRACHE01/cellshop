@@ -4,7 +4,6 @@ import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
 import { ProductsModule } from './products/products.module';
 import { CartModule } from './cart/cart.module';
 import { CartItemsModule } from './cart-items/cart-items.module';
-console.log('DATABASE_URL:', process.env.DATABASE_URL);
 @Module({
 
   imports: [

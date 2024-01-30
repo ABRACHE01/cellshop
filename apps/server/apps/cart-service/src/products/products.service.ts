@@ -17,6 +17,10 @@ export class ProductService {
     return await createdProduct.save();
   }
 
+  async getAll(): Promise<Product[]> {
+    return this.productModel.find().exec();
+  }
+
   // async getProductById(productId: string): Promise<Product> {
   //   return await this.productModel.findById(productId).exec();
   // }

@@ -29,4 +29,15 @@ export class ProductController {
       product: newProduct,
     });
   }
+
+  @Get()
+  async getAll(@Res() res: any) {
+    try {
+      const products = await this.productService.getAll();
+      return res.json(products);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
 }
