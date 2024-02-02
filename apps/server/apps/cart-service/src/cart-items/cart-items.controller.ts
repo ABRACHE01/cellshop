@@ -10,7 +10,7 @@ export class CartItemsController {
   @Post()
   async addProductToCart(@Body() cartDto: { cartId: string; productId: string; quantity: number }) {
     const cart = await this.cartItemsService.addProductToCart(cartDto.cartId, cartDto.productId, cartDto.quantity);
-    return { message: 'Product added to cart successfully', cart };
+    return { message: 'Product tzad to cart successfully', cart };
   }
 
   @Patch()
