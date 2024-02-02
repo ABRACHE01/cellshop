@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
+import { ShoppingCard } from '../shopping-card/page'
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -47,6 +51,12 @@ const ProductList = () => {
 
   return (
     <div>
+      <div className="flex justify-end m-4">
+        <Link href="/shopping-cart">
+          <FontAwesomeIcon icon={faCartShopping} className='text-red-500 text-3xl' />
+        </Link>
+      </div>
+
       {successMessage && (
         <div>
           <div id="successModal" aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
