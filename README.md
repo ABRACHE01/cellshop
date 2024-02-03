@@ -26,7 +26,7 @@ $ pnpm install
 $ pnpm run dev
 
 # runing the (client) only 
-$ pnpm -filter client run dev 
+$ pnpm --filter client run dev 
 
 # runing a spisefic service in the (server)   
 $ pnpm --filter server run dev  <name of your service >
