@@ -52,7 +52,7 @@ const ProductList = () => {
   return (
     <div>
       <div className="flex justify-end m-4">
-        <Link href="/shopping-cart">
+        <Link href="/shopping-card">
           <FontAwesomeIcon icon={faCartShopping} className='text-red-500 text-3xl' />
         </Link>
       </div>

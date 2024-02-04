@@ -1,11 +1,9 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 import { CartItem, CartItemDocument } from './entities/cart-item.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import { CartItemsController } from './cart-items.controller';
 import { Product, ProductDocument } from '../products/entities/product.entity';
-import { Model, Types } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { Cart, CartDocument } from '../cart/entities/cart.entity';
 
 @Injectable()
@@ -33,19 +31,33 @@ export class CartItemsService {
         throw new BadRequestException('Invalid quantity');
       }
 
-      // Assuming your CartItem model/entity has a method to create new instances
       const newCartItem = await this.cartItemModel.create({
-        cartId: cart._id, // Assigning the cart's ID to the new cart item
-        productId: product._id, // Assigning the product's ID to the new cart item
-        quantity: quantity // Assigning the requested quantity
+        cartId: cart._id,
+        productId: product._id,
+        quantity: quantity
       });
-
-      // Perform any other necessary operations here
 
       return newCartItem.toJSON();
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException('Something went wrong');
+    }
+  }
+
+  async getCartItemsByCartId(cartId: any): Promise<CartItem[]> {
+    cartId = new Types.ObjectId(cartId);
+
+    try {
+      const cartItems = await this.cartItemModel
+        .find({ cartId })
+        .populate('productId', 'name price')
+        .exec();
+
+      console.log('Fetched cart items:', cartItems);
+      return cartItems;
+    } catch (error) {
+      console.error('Error fetching cart items:', error);
+      throw error;
     }
   }
 

@@ -13,6 +13,11 @@ export class CartItemsController {
     return { message: 'Product tzad to cart successfully', cart };
   }
 
+  @Get(':cartId')
+  async getCartItemsByCartId(@Param('cartId') cartId: string) {
+    return this.cartItemsService.getCartItemsByCartId(cartId);
+  }
+
   @Patch()
   async updateProductQuantity(@Body() updateDto: { cartId: string; productId: string; quantity: number }) {
     const { cartId, productId, quantity } = updateDto;
