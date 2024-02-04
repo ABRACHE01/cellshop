@@ -50,7 +50,7 @@ export class CartItemsService {
     try {
       const cartItems = await this.cartItemModel
         .find({ cartId })
-        .populate('productId', 'name price')
+        .populate('productId', 'name price image')
         .exec();
 
       console.log('Fetched cart items:', cartItems);
