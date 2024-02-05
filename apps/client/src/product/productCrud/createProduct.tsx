@@ -7,10 +7,13 @@ import { Brand } from '../models/productModel';
 import { AddProduct } from '../Api/productApi';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
+import { UploadButton } from '@/utils/uploadthing';
 
 const CreateProduct = () => {
   const [product, setProducts] = useState<Product[]>([]);
   const [brands , setBrands] = useState<Brand[]>([]);
+  const [imageUrl , setImageUrl] = useState<string>('');
+
   const router = useRouter();
 
   useEffect(() => {
@@ -49,8 +52,11 @@ const CreateProduct = () => {
     e.preventDefault();
     try {
       console.log(product);
-
-      const response = await AddProduct(product);
+      const productWithImage = {
+        ...product,
+        image: imageUrl,
+      };
+      const response = await AddProduct(productWithImage);
       router.push(`/product`)
 
     } catch (error) {
@@ -67,9 +73,21 @@ const CreateProduct = () => {
       <div className="container mx-auto my-4 px-4 lg:px-20">
         <div className="w-full p-8 my-4 md:px-12 lg:w-9/12 lg:pl-20 lg:pr-40 mr-auto rounded-2xl shadow-2xl">
           <div className="flex">
-            <h1 className="font-bold uppercase text-5xl">
+            <h1 className="font-bold uppercase text-4xl  ">
               Add a new Product
             </h1>
+          </div>
+          <div className='m-9'>
+          <UploadButton
+              endpoint="imageUploader"
+              onClientUploadComplete={(res) => {
+                setImageUrl(res[0].url)
+                alert("Upload Completed");
+              }}
+              onUploadError={(error: Error) => {
+                alert(`ERROR! ${error.message}`);
+              }}
+            />
           </div>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 mt-5">
             <input
