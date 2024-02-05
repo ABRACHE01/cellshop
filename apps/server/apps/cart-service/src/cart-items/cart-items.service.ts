@@ -62,19 +62,30 @@ export class CartItemsService {
   }
 
   async updateProductQuantity(cartId: string, productId: string, quantity: number): Promise<CartItem> {
+    console.log("cartid: ", cartId, "productId: ", productId, "quantity", quantity)
+    console.log("hhhhhhhhhhhh")
     try {
-      const cartItem = await this.cartItemModel.findOne();
+      const convertedCartId = new Types.ObjectId(cartId);
+      const convertedProductId = new Types.ObjectId(productId);
+  
+      const cartItem = await this.cartItemModel.findOne({ cartId: convertedCartId, productId: convertedProductId });
+      console.log("cartItem:", cartItem);
+  
       if (!cartItem) {
-        throw new NotFoundException('Cart item not found')
-      }
-      console.log(cartItem)
-      cartItem.quantity = quantity
-
-      const updatedCartItem = await cartItem.save();
-
-      if (!cartItem) {
+        console.log(`Cart item not found for cartId: ${cartId}, productId: ${productId}`);
         throw new NotFoundException('Cart item not found');
       }
+  
+      console.log(cartItem);
+      cartItem.quantity = quantity;
+  
+      const updatedCartItem = await cartItem.save();
+  
+      if (!updatedCartItem) {
+        console.log('Failed to update cart item');
+        throw new NotFoundException('Cart item not found after update');
+      }
+  
       return updatedCartItem;
     } catch (error) {
       console.error(error);

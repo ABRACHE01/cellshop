@@ -70,7 +70,9 @@ const ProductList = () => {
           </div>
         </div>
       )}
-
+      <div>
+        <h1 className='ml-11 text-2xl text-gray-500 my-3'>Our Latest products</h1>
+      </div>
       <div className="flex flex-wrap justify-around">
         {products.map((product) => (
           <div key={product._id} className="bg-white p-6 m-4 rounded-lg shadow-md max-w-xs">
@@ -80,8 +82,8 @@ const ProductList = () => {
               className="object-cover w-full h-48 mb-4 rounded-md"
             />
             <h2 className="text-lg font-semibold">{product.name}</h2>
-            <p className="text-gray-700">${product.price}</p>
-            <p className="text-gray-700">Quantity: {product.quantity}</p>
+            <p className="text-gray-700 font-bold text-sm">${product.price}</p>
+            <p className="text-gray-700">Quantity in store: {product.quantity}</p>
             <button
               onClick={() => addProductToCart(product._id)}
               className="bg-blue-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
