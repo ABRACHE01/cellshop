@@ -11,10 +11,5 @@ export class CreateProductDto {
 
   @MaxLength(1000)
   description: string;
-
-  @IsString()
-  image: string;
-
-  Brand: Brand;
   
 }
