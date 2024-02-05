@@ -4,7 +4,6 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
-import { ShoppingCard } from '../shopping-card/page'
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);

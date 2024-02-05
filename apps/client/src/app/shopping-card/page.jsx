@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 const ShoppingCard = () => {
 
@@ -23,14 +25,31 @@ const ShoppingCard = () => {
 
     const handleDelete = async (cartId, productId) => {
         try {
-          const response = await axios.delete(`http://localhost:2020/cart-items/${cartId}/${productId}`);
-          console.log(response.data); // Assuming the backend sends a response message
-          // Optionally, you can update the state or perform other actions after a successful deletion
+            const response = await axios.delete(`http://localhost:2020/cart-items/${cartId}/${productId}`);
+            console.log(response.data); // Assuming the backend sends a response message
+            // Optionally, you can update the state or perform other actions after a successful deletion
         } catch (error) {
-          console.error('Error deleting product:', error);
-          // Optionally, handle errors or show a notification to the user
+            console.error('Error deleting product:', error);
+            // Optionally, handle errors or show a notification to the user
         }
-      };
+    };
+
+    const [updatedQuantity, setUpdatedQuantity] = useState(1);
+
+    const handleUpdate = async (cartId, productId) => {
+        try {
+            const response = await axios.patch('http://localhost:2020/cart-items', {
+                cartId,
+                productId,
+                quantity: updatedQuantity,
+            });
+            console.log(response.data); // Assuming the backend sends a response message
+            // Optionally, you can update the state or perform other actions after a successful update
+        } catch (error) {
+            console.error('Error updating product quantity:', error);
+            // Optionally, handle errors or show a notification to the user
+        }
+    };
 
     return (
         <div>
@@ -45,45 +64,31 @@ const ShoppingCard = () => {
                                     <div className="mt-5 sm:mt-0">
                                         <div>
                                             <h2 className="text-lg font-bold text-gray-900">{cartItem.productId.name}</h2>
+                                            <p className="text-xs font-bold text-gray-900">You have {cartItem.quantity} items</p>
                                         </div>
-                                        <div className="mt-3 flex items-center space-x-4">
-                                            <button
+                                        <div className="mt-3 flex items-center space-x-3">
+                                            <FontAwesomeIcon icon={faTrash} className='text-red-500 text-2xl text-red-500 cursor-pointer' 
                                                 onClick={() => handleDelete(cartItem.cartId, cartItem.productId._id)}
-                                                className="text-red-500 cursor-pointer"
-                                            >
-                                                Delete
-                                            </button>
-                                            <button
-                                                onClick={() => handleUpdate(cartItem._id)}
-                                                className="text-blue-500 cursor-pointer"
-                                            >
-                                                Update
-                                            </button>
+                                            />
+                                            <FontAwesomeIcon icon={faPenToSquare} className='text-red-500 text-2xl text-blue-500 cursor-pointer' 
+                                                onClick={() => handleUpdate(cartItem._id, cartItem.productId)} 
+                                            />
                                         </div>
                                     </div>
-                                    <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+                                    <div className="sm:space-y-6">
                                         <div className="flex items-center border-gray-100">
                                             <span className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </span>
                                             <input
                                                 className="h-8 w-8 border bg-white text-center text-xs outline-none"
                                                 type="number"
-                                                value={cartItem.quantity}
+                                                value={updatedQuantity}
                                                 min="1"
+                                                onChange={(e) => setUpdatedQuantity(parseInt(e.target.value, 10))}
                                             />
                                             <span className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </span>
                                         </div>
                                         <div className="flex items-center space-x-4">
-                                            <p className="text-sm">{cartItem.productId.price}$</p>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke-width="1.5"
-                                                stroke="currentColor"
-                                                className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500"
-                                            >
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
+                                            <p className="text-sm font-bold"> Price total   {cartItem.productId.price * cartItem.quantity}$</p>
                                         </div>
                                     </div>
                                 </div>
