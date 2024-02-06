@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CartItemsService } from './cart-items.service';
-import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 
 @Controller('cart-items')
@@ -33,15 +32,6 @@ export class CartItemsController {
     await this.cartItemsService.deleteProductFromCart(cartId, productId);
     return { message: 'The product has been successfully deleted from the shopping cart' };
   }
-
-  // @Delete(':cartId/products/:productId')
-  // async deleteProductFromCart(
-  //   @Param('cartId') cartId: string,
-  //   @Param('productId') productId: string,
-  // ) {
-  //   const cart = await this.cartItemsService.deleteProductFromCart(cartId, productId);
-  //   return { message: 'Product deleted from cart successfully', cart };
-  // }
 
   @Get()
   findAll() {

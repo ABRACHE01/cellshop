@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./apps/server
+      dockerfile: Dockerfile
+    image: backend-app
+    command: pnpm --filter server run dev cart-service
+    ports:
+      - "2020:2020"
+
+  client:
+    build:
+      context: ./apps/client
+      dockerfile: Dockerfile
+    command: pnpm --filter client run dev
+    ports:
+      - "3000:3000"
