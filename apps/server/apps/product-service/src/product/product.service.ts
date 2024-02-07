@@ -18,15 +18,10 @@ export class ProductService {
       where: { description: ILike(`%${query}%`), isDeleted: false },
     });
 
-    const brandResults = await this.productRepository.find({
-      where: { brand: ILike(`%${query}%`), isDeleted: false },
-    });
-
     const nameResults = await this.productRepository.find({
       where: { name: ILike(`%${query}%`), isDeleted: false },
     });
-
-    const combinedResults = [...descriptionResults, ...brandResults , ...nameResults];
+    const combinedResults = [...descriptionResults , ...nameResults];
     return combinedResults;
   }
 
