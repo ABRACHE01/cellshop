@@ -3,6 +3,7 @@ import { CartServiceModule } from './cart-service.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(CartServiceModule);
-  await app.listen(2020);
+  app.enableCors();
+  await app.listen( 2020);
 }
 bootstrap();
