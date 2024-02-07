@@ -17,8 +17,8 @@ export class CartItemsService {
 
   async addProductToCart(cartId: string, productId: string, quantity: number): Promise<CartItem> {
     try {
-      const cart = await this.cartModel.findById(cartId);
       const product = await this.productModel.findById(productId);
+      const cart = await this.cartModel.findById(cartId);
 
       if (!cart) {
         throw new NotFoundException('Cart not found');
@@ -63,7 +63,6 @@ export class CartItemsService {
 
   async updateProductQuantity(cartId: string, productId: string, quantity: number): Promise<CartItem> {
     console.log("cartid: ", cartId, "productId: ", productId, "quantity", quantity)
-    console.log("hhhhhhhhhhhh")
     try {
       const convertedCartId = new Types.ObjectId(cartId);
       const convertedProductId = new Types.ObjectId(productId);

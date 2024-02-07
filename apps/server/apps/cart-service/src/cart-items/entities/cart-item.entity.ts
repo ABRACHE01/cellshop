@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory  } from '@nestjs/mongoose';
-import mongoose, { ObjectId, SchemaTypes, Types  } from 'mongoose';
+import mongoose, { Document, ObjectId, SchemaTypes, Types  } from 'mongoose';
 
 @Schema()
 
