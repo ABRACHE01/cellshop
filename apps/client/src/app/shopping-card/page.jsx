@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 
 const ShoppingCard = () => {
 
@@ -31,13 +32,13 @@ const ShoppingCard = () => {
             console.error('Error deleting product:', error);
         }
     };
-    
+
     const updateQuantity = (index, value) => {
         const updatedItems = [...cartItems];
         console.log(updatedItems)
         updatedItems[index].quantity = value;
         setCartItems(updatedItems);
-      };
+    };
 
     const handleUpdate = async (cartId, productId, updatedQuantity) => {
         try {
@@ -58,7 +59,7 @@ const ShoppingCard = () => {
     return (
         <div>
             <div className="h-screen bg-gray-100 pt-20">
-                <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
+                <h1 className="ml-48 mb-7 text-2xl text-gray-500 font-bold">Cart Items</h1>
                 <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
                     <div className="rounded-lg md:w-2/3">
                         {cartItems.map((cartItem, index) => (
@@ -71,21 +72,21 @@ const ShoppingCard = () => {
                                             <p className="text-xs font-bold text-gray-900">You have {cartItem.quantity} items</p>
                                         </div>
                                         <div className="mt-3 flex items-center space-x-3">
-                                            <FontAwesomeIcon icon={faTrash} className='text-red-500 text-xl text-red-500 cursor-pointer' 
+                                            <FontAwesomeIcon icon={faTrash} className='text-red-500 text-xl text-red-500 cursor-pointer'
                                                 onClick={() => handleDelete(cartItem.cartId, cartItem.productId._id)}
                                             />
-                                            <FontAwesomeIcon icon={faPenToSquare} className='text-blue-500 text-xl text-blue-500 cursor-pointer' 
-                                                onClick={() => handleUpdate(cartItem.cartId, cartItem.productId._id, cartItem.quantity)} 
+                                            <FontAwesomeIcon icon={faPenToSquare} className='text-blue-500 text-xl text-blue-500 cursor-pointer'
+                                                onClick={() => handleUpdate(cartItem.cartId, cartItem.productId._id, cartItem.quantity)}
                                             />
                                         </div>
                                     </div>
                                     <div className="sm:space-y-6">
                                         <div className="flex items-center border-gray-100">
-                                            <span 
+                                            <span
                                                 className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"
                                                 onClick={() => updateQuantity(index, cartItem.quantity - 1)}
-                                            > 
-                                                - 
+                                            >
+                                                -
                                             </span>
                                             <input
                                                 className="h-8 w-8 border bg-white text-center text-xs outline-none"
@@ -94,11 +95,11 @@ const ShoppingCard = () => {
                                                 min="1"
                                                 onChange={(e) => updateQuantity(index, parseInt(e.target.value, 10))}
                                             />
-                                            <span 
+                                            <span
                                                 className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"
                                                 onClick={() => updateQuantity(index, cartItem.quantity + 1)}
-                                            > 
-                                                + 
+                                            >
+                                                +
                                             </span>
                                         </div>
                                         <div className="flex items-center space-x-4">
@@ -129,6 +130,14 @@ const ShoppingCard = () => {
                         <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
                     </div>
                 </div>
+                <Link href="/product-list" className='flex mx-auto w-3/4'>
+                    <button type="button" className="w-full flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-gray-800 dark:bg-gray-900 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">
+                        <svg class="w-5 h-5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                        </svg>
+                        <span>Go back</span>
+                    </button>
+                </Link>
             </div>
         </div>
     );
