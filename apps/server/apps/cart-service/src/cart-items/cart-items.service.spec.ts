@@ -74,53 +74,104 @@ describe('CartItemsService', () => {
     });
 
     it('should throw InternalServerErrorException if product is not found', async () => {
-        const mockCartId = 'mockCartId';
-        const mockProductId = 'nonExistentProductId';
-        const mockQuantity = 1;
-      
-        // Mock the cartModel to resolve to a valid cart
-        (cartModel.findById as jest.Mock).mockResolvedValue({ _id: mockCartId });
-      
-        // Mock the productModel to resolve to null
-        (productModel.findById as jest.Mock).mockResolvedValue(null);
-      
-        try {
-          // Call the function that is expected to throw InternalServerErrorException
-          await service.addProductToCart(mockCartId, mockProductId, mockQuantity);
-          // If it doesn't throw an exception, fail the test
-          fail('InternalServerErrorException was not thrown');
-        } catch (error) {
-          // Check if the caught error is an instance of InternalServerErrorException
-          expect(error).toBeInstanceOf(InternalServerErrorException);
-          expect(error.message).toBe('Something went wrong');
-        }
-      
-        // Verify that the findById methods were called with the correct arguments
-        expect(cartModel.findById).toHaveBeenCalledWith(mockCartId);
-        expect(productModel.findById).toHaveBeenCalledWith(mockProductId);
-      });
+      const mockCartId = 'mockCartId';
+      const mockProductId = 'nonExistentProductId';
+      const mockQuantity = 1;
 
-      it('should throw InternalServerErrorException if product quantity is less than requested quantity', async () => {
-        const mockCartId = 'mockCartId';
-        const mockProductId = 'mockProductId';
-        const mockQuantity = 10;
-      
-        const mockCart = { _id: mockCartId };
-        const mockProduct = { _id: mockProductId, quantity: 5 };
-      
-        (cartModel.findById as jest.Mock).mockResolvedValue(mockCart);
-        (productModel.findById as jest.Mock).mockResolvedValue(mockProduct);
-      
-        try {
-          await service.addProductToCart(mockCartId, mockProductId, mockQuantity);
-          fail('InternalServerErrorException was not thrown');
-        } catch (error) {
-          expect(error).toBeInstanceOf(InternalServerErrorException);
-          expect(error.message).toBe('Something went wrong'); // Update the expected error message here
-        }
-      
-        expect(cartModel.findById).toHaveBeenCalledWith(mockCartId);
-        expect(productModel.findById).toHaveBeenCalledWith(mockProductId);
+      // Mock the cartModel to resolve to a valid cart
+      (cartModel.findById as jest.Mock).mockResolvedValue({ _id: mockCartId });
+
+      // Mock the productModel to resolve to null
+      (productModel.findById as jest.Mock).mockResolvedValue(null);
+
+      try {
+        // Call the function that is expected to throw InternalServerErrorException
+        await service.addProductToCart(mockCartId, mockProductId, mockQuantity);
+        // If it doesn't throw an exception, fail the test
+        fail('InternalServerErrorException was not thrown');
+      } catch (error) {
+        // Check if the caught error is an instance of InternalServerErrorException
+        expect(error).toBeInstanceOf(InternalServerErrorException);
+        expect(error.message).toBe('Something went wrong');
+      }
+
+      // Verify that the findById methods were called with the correct arguments
+      expect(cartModel.findById).toHaveBeenCalledWith(mockCartId);
+      expect(productModel.findById).toHaveBeenCalledWith(mockProductId);
+    });
+
+    it('should throw InternalServerErrorException if product quantity is less than requested quantity', async () => {
+      const mockCartId = 'mockCartId';
+      const mockProductId = 'mockProductId';
+      const mockQuantity = 10;
+
+      const mockCart = { _id: mockCartId };
+      const mockProduct = { _id: mockProductId, quantity: 5 };
+
+      (cartModel.findById as jest.Mock).mockResolvedValue(mockCart);
+      (productModel.findById as jest.Mock).mockResolvedValue(mockProduct);
+
+      try {
+        await service.addProductToCart(mockCartId, mockProductId, mockQuantity);
+        fail('InternalServerErrorException was not thrown');
+      } catch (error) {
+        expect(error).toBeInstanceOf(InternalServerErrorException);
+        expect(error.message).toBe('Something went wrong'); // Update the expected error message here
+      }
+
+      expect(cartModel.findById).toHaveBeenCalledWith(mockCartId);
+      expect(productModel.findById).toHaveBeenCalledWith(mockProductId);
+    });
+
+    it('should create a new cart item and return it', async () => {
+      const mockCartId = 'mockCartId';
+      const mockProductId = 'mockProductId';
+      const mockQuantity = 10;
+
+      const mockCart = { _id: mockCartId };
+      const mockProduct = { _id: mockProductId, quantity: 15 };
+
+      (cartModel.findById as jest.Mock).mockResolvedValue(mockCart);
+      (productModel.findById as jest.Mock).mockResolvedValue(mockProduct);
+      (cartItemModel.create as jest.Mock).mockRejectedValue(new Error('Something went wrong'));
+
+      await expect(service.addProductToCart(mockCartId, mockProductId, mockQuantity)).rejects.toThrow(InternalServerErrorException);
+      expect(cartModel.findById).toHaveBeenCalledWith(mockCartId);
+      expect(productModel.findById).toHaveBeenCalledWith(mockProductId);
+      expect(cartItemModel.create).toHaveBeenCalledWith({
+        cartId: mockCartId,
+        productId: mockProductId,
+        quantity: mockQuantity,
       });
+    });
+
+    it('should throw InternalServerErrorException if creating cart item fails', async () => {
+      const mockCartId = 'mockCartId';
+      const mockProductId = 'mockProductId';
+      const mockQuantity = 10;
+
+      const mockCart = { _id: mockCartId };
+      const mockProduct = { _id: mockProductId, quantity: 15 };
+
+      (cartModel.findById as jest.Mock).mockResolvedValue(mockCart);
+      (productModel.findById as jest.Mock).mockResolvedValue(mockProduct);
+      (cartItemModel.create as jest.Mock).mockRejectedValue(new Error('Failed to create cart item'));
+
+      try {
+        await service.addProductToCart(mockCartId, mockProductId, mockQuantity);
+        fail('InternalServerErrorException was not thrown');
+      } catch (error) {
+        expect(error).toBeInstanceOf(InternalServerErrorException);
+        expect(error.message).toBe('Something went wrong');
+      }
+
+      expect(cartModel.findById).toHaveBeenCalledWith(mockCartId);
+      expect(productModel.findById).toHaveBeenCalledWith(mockProductId);
+      expect(cartItemModel.create).toHaveBeenCalledWith({
+        cartId: mockCartId,
+        productId: mockProductId,
+        quantity: mockQuantity,
+      });
+    });
   });
 });
